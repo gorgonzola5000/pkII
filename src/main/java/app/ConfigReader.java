@@ -1,4 +1,4 @@
-package org.example;
+package app;
 
 import java.io.InputStream;
 import java.util.Properties;
@@ -8,7 +8,7 @@ public class ConfigReader {
     private static Properties properties;
 
     public ConfigReader(){
-        this.properties = loadProperties();
+        properties = loadProperties();
     }
 
     public static void main(String[] args) {
@@ -26,9 +26,7 @@ public class ConfigReader {
 
             // Load the properties file
             properties.load(input);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception ignored){}
         return properties;
     }
 
