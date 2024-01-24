@@ -34,7 +34,7 @@ public class Server {
 
         while (true) {
             Socket clientSocket = serverSocket.accept();
-            handleClientRequest(clientSocket);
+            new Thread(new ClientHandler(clientSocket, translator)).start();
         }
     }
 
