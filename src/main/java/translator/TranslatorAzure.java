@@ -10,7 +10,7 @@ import java.util.Objects;
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 import okhttp3.*;
-import app.ConfigReader;
+import app.server.ConfigReader;
 
 public class TranslatorAzure implements Translator {
     private static String key;
