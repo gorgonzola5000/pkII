@@ -1,5 +1,3 @@
-package app;
-
 import translator.Language;
 import translator.Translator;
 import translator.TranslatorAzure;
