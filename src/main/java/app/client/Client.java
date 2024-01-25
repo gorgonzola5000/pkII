@@ -2,15 +2,13 @@ package app.client;
 
 import java.io.*;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 public class Client {
     private Socket socket;
     private PrintWriter out;
     private BufferedReader in;
-    private List<Integer> wordLengths = new ArrayList<>();
+    private ClientGUI clientGUI;
     public static void main(String[] args) {
         Client client = new Client();
         System.out.println("Specify server IP address: ");
@@ -25,6 +23,12 @@ public class Client {
             System.out.println("Error connecting to server: " + e.getMessage());
         }
     }
+
+    public Client() {
+        this.clientGUI = new ClientGUI(this);
+        clientGUI.setVisible(true);
+    }
+
     public void connect(String host, int port) throws IOException {
         if (socket == null) {
             socket = new Socket(host, port);

@@ -30,12 +30,17 @@ public class ClientHandler implements Runnable {
     private void handleClientRequest() throws IOException {
         BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
         PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
-
+        String sourceLanguageCode;
+        String targetLanguageCode;
         String text;
         do {
+            sourceLanguageCode = in.readLine();
+            targetLanguageCode = in.readLine();
             text = in.readLine();
             if (text != null && !text.equalsIgnoreCase("exit")) {
-                String translatedText = translator.translate(text, new Language("en"), new Language("fr"));
+                Language sourceLanguage = new Language(sourceLanguageCode);
+                Language targetLanguage = new Language(targetLanguageCode);
+                String translatedText = translator.translate(text, sourceLanguage, targetLanguage);
                 out.println(translatedText);
 
                 calculateStatistics(text);

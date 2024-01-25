@@ -37,14 +37,4 @@ public class Server {
             new Thread(new ClientHandler(clientSocket, translator)).start();
         }
     }
-
-    private void handleClientRequest(Socket clientSocket) throws IOException {
-        BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-        PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
-
-        String text = in.readLine();
-        String translatedText = translator.translate(text, new Language("en"), new Language("fr"));
-
-        out.println(translatedText);
-    }
 }
