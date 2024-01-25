@@ -45,7 +45,7 @@ public class ClientHandler implements Runnable {
                 Language sourceLanguage = new Language(sourceLanguageCode);
                 Language targetLanguage = new Language(targetLanguageCode);
                 String translatedText = translator.translate(text, sourceLanguage, targetLanguage);
-                out.println("From " + sourceLanguageCode + " -> " + targetLanguageCode + ": " + text + " -> " + translatedText);
+                out.println(sourceLanguageCode + " -> " + targetLanguageCode + ": " + text + " -> " + translatedText);
 
                 calculateStatistics(text);
                 double averageWordLength = wordLengths.stream().mapToInt(Integer::intValue).average().orElse(0.0);

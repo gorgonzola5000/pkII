@@ -49,6 +49,7 @@ public class Client {
         Scanner scanner = new Scanner(System.in);
         String text;
         do {
+            clientGUI.updateLanguageComboBoxes();
             System.out.println("Enter text to translate (or 'exit' to quit): ");
             text = scanner.nextLine();
 
@@ -91,5 +92,9 @@ public class Client {
             in.close();
             in = null;
         }
+    }
+
+    public List<Language> getAvailableLanguagesList() {
+        return availableLanguages;
     }
 }

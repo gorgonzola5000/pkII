@@ -1,15 +1,18 @@
 package app.client;
 
+import translator.Language;
+
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
+import java.util.List;
 
 public class ClientGUI extends JFrame {
     private Client client;
     private JTextField inputField;
     private JTextArea responseArea;
-    private JComboBox<String> sourceLanguageComboBox;
-    private JComboBox<String> targetLanguageComboBox;
+    private JComboBox<Language> sourceLanguageComboBox;
+    private JComboBox<Language> targetLanguageComboBox;
 
     public static void main(String[] args) {
         Client client = new Client();
@@ -30,9 +33,9 @@ public class ClientGUI extends JFrame {
 
         setLayout(new BorderLayout()); // Changed to BorderLayout
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(800, 600);
+        setSize(1200, 800);
 
-        JLabel topLabel = new JLabel("Your Text Here");
+        JLabel topLabel = new JLabel("Java Translator");
         topLabel.setFont(new Font(topLabel.getFont().getFontName(), topLabel.getFont().getStyle(), topLabel.getFont().getSize() * 3));
         add(topLabel, BorderLayout.NORTH); // Add label to the top
 
@@ -43,9 +46,8 @@ public class ClientGUI extends JFrame {
         responseArea = new JTextArea();
         responseArea.setEditable(false);
 
-        String[] languages = {"en", "es", "fr"};
-        sourceLanguageComboBox = new JComboBox<>(languages);
-        targetLanguageComboBox = new JComboBox<>(languages);
+        sourceLanguageComboBox = new JComboBox<>();
+        targetLanguageComboBox = new JComboBox<>();
 
         Dimension comboBoxDimension = new Dimension(200, 40); // Changed height from 20 to 40
         sourceLanguageComboBox.setPreferredSize(comboBoxDimension);
@@ -65,12 +67,12 @@ public class ClientGUI extends JFrame {
             SwingWorker<Void, Void> worker = new SwingWorker<>() {
                 @Override
                 protected Void doInBackground() throws Exception {
-                    String sourceLanguage = (String) sourceLanguageComboBox.getSelectedItem();
-                    String targetLanguage = (String) targetLanguageComboBox.getSelectedItem();
+                    Language sourceLanguage = (Language) sourceLanguageComboBox.getSelectedItem();
+                    Language targetLanguage = (Language) targetLanguageComboBox.getSelectedItem();
                     String text = inputField.getText();
                     try {
-                        client.sendText(sourceLanguage);
-                        client.sendText(targetLanguage);
+                        client.sendText(sourceLanguage.getLanguageCode());
+                        client.sendText(targetLanguage.getLanguageCode());
                         client.sendText(text);
                         String response = client.getResponse();
                         responseArea.append(response + "\n");
@@ -106,5 +108,20 @@ public class ClientGUI extends JFrame {
         centerPanel.add(new JScrollPane(responseArea));
 
         add(centerPanel, BorderLayout.CENTER); // Add centerPanel to the center
+    }
+
+    public void updateLanguageComboBoxes() {
+        // Remove all items from the combo boxes
+        sourceLanguageComboBox.removeAllItems();
+        targetLanguageComboBox.removeAllItems();
+
+        // Fetch the available languages from the server
+        List<Language> languages = client.getAvailableLanguagesList();
+
+        // Add the available languages to the combo boxes
+        for (Language language : languages) {
+            sourceLanguageComboBox.addItem(language);
+            targetLanguageComboBox.addItem(language);
+        }
     }
 }
