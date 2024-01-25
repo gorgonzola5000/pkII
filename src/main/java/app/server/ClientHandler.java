@@ -11,6 +11,7 @@ import java.util.List;
 public class ClientHandler implements Runnable {
     private Socket clientSocket;
     private Translator translator;
+    private ObjectInputStream objectIn;
     private List<Integer> wordLengths = new ArrayList<>();
 
     public ClientHandler(Socket clientSocket, Translator translator) {
@@ -28,24 +29,29 @@ public class ClientHandler implements Runnable {
             handleClientRequest();
         } catch (IOException e) {
             System.out.println("Error handling client request: " + e.getMessage());
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
     }
 
-    private void handleClientRequest() throws IOException {
+    private void handleClientRequest() throws IOException, ClassNotFoundException {
         BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
         PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
-        String sourceLanguageCode;
-        String targetLanguageCode;
+        ObjectInputStream objectIn = new ObjectInputStream(clientSocket.getInputStream());
+        Language sourceLanguage = null;
+        Language targetLanguage = null;
+//        String sourceLanguageCode;
+//        String targetLanguageCode;
         String text;
         do {
-            sourceLanguageCode = in.readLine();
-            targetLanguageCode = in.readLine();
+            sourceLanguage = (Language) objectIn.readObject();
+            targetLanguage = (Language) objectIn.readObject();
             text = in.readLine();
             if (text != null && !text.equalsIgnoreCase("exit")) {
-                Language sourceLanguage = new Language(sourceLanguageCode);
-                Language targetLanguage = new Language(targetLanguageCode);
+//                Language sourceLanguage = new Language(sourceLanguageCode);
+//                Language targetLanguage = new Language(targetLanguageCode);
                 String translatedText = translator.translate(text, sourceLanguage, targetLanguage);
-                out.println(sourceLanguageCode + " -> " + targetLanguageCode + ": " + text + " -> " + translatedText);
+                out.println(sourceLanguage.getLanguageCode() + " -> " + targetLanguage.getLanguageCode() + ": " + text + " -> " + translatedText);
 
                 calculateStatistics(text);
                 double averageWordLength = wordLengths.stream().mapToInt(Integer::intValue).average().orElse(0.0);

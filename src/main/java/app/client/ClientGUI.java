@@ -94,8 +94,8 @@ public class ClientGUI extends JFrame {
                     Language targetLanguage = (Language) targetLanguageComboBox.getSelectedItem();
                     String text = inputField.getText();
                     try {
-                        client.sendText(sourceLanguage.getLanguageCode());
-                        client.sendText(targetLanguage.getLanguageCode());
+                        client.sendLanguage(sourceLanguage);
+                        client.sendLanguage(targetLanguage);
                         client.sendText(text);
                         String response = client.getResponse();
                         responseArea.append(response + "\n");

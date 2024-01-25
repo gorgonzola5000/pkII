@@ -12,6 +12,7 @@ public class Client {
     private PrintWriter out;
     private BufferedReader in;
     private ObjectInputStream objectIn;
+    private ObjectOutputStream objectOut;
     private List<Language> availableLanguages;
     private ClientGUI clientGUI;
 
@@ -96,4 +97,12 @@ public class Client {
     public List<Language> getAvailableLanguagesList() {
         return availableLanguages;
     }
+    public void sendLanguage(Language language) throws IOException {
+        if (objectOut == null) {
+            objectOut = new ObjectOutputStream(socket.getOutputStream());
+        }
+        objectOut.writeObject(language);
+        objectOut.flush();
+    }
+
 }
