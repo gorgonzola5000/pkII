@@ -44,12 +44,11 @@ public class Client {
 
             availableLanguages = (List<Language>) objectIn.readObject();
             availableLanguages.forEach(language -> System.out.println(language.getLanguageName()));
+            clientGUI.updateLanguageComboBoxes();
         }
-
         Scanner scanner = new Scanner(System.in);
         String text;
         do {
-            clientGUI.updateLanguageComboBoxes();
             System.out.println("Enter text to translate (or 'exit' to quit): ");
             text = scanner.nextLine();
 

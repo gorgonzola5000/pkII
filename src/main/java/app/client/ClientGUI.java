@@ -48,6 +48,29 @@ public class ClientGUI extends JFrame {
 
         sourceLanguageComboBox = new JComboBox<>();
         targetLanguageComboBox = new JComboBox<>();
+        sourceLanguageComboBox = new JComboBox<>();
+        sourceLanguageComboBox.setRenderer(new DefaultListCellRenderer() {
+            @Override
+            public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+                super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+                if (value instanceof Language) {
+                    setText(((Language) value).getLanguageName());
+                }
+                return this;
+            }
+        });
+
+        targetLanguageComboBox = new JComboBox<>();
+        targetLanguageComboBox.setRenderer(new DefaultListCellRenderer() {
+            @Override
+            public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+                super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+                if (value instanceof Language) {
+                    setText(((Language) value).getLanguageName());
+                }
+                return this;
+            }
+        });
 
         Dimension comboBoxDimension = new Dimension(200, 40); // Changed height from 20 to 40
         sourceLanguageComboBox.setPreferredSize(comboBoxDimension);
