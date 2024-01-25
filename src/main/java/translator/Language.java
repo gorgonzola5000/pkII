@@ -1,5 +1,8 @@
 package translator;
-public class Language {
+
+import java.io.Serializable;
+
+public class Language implements Serializable {
     private String languageCode;
     private String nativeLanguageName;
     private String languageName;

@@ -1,14 +1,20 @@
 package app.client;
 
+import translator.Language;
+
 import java.io.*;
 import java.net.Socket;
+import java.util.List;
 import java.util.Scanner;
 
 public class Client {
     private Socket socket;
     private PrintWriter out;
     private BufferedReader in;
+    private ObjectInputStream objectIn;
+    private List<Language> availableLanguages;
     private ClientGUI clientGUI;
+
     public static void main(String[] args) {
         Client client = new Client();
         System.out.println("Specify server IP address: ");
@@ -19,7 +25,7 @@ public class Client {
         //int port = scanner.nextInt();
         try {
             client.connect(host, port); // replace with your host, port, and text
-        } catch (IOException e) {
+        } catch (IOException | ClassNotFoundException e) {
             System.out.println("Error connecting to server: " + e.getMessage());
         }
     }
@@ -29,11 +35,15 @@ public class Client {
         clientGUI.setVisible(true);
     }
 
-    public void connect(String host, int port) throws IOException {
+    public void connect(String host, int port) throws IOException, ClassNotFoundException {
         if (socket == null) {
             socket = new Socket(host, port);
             out = new PrintWriter(socket.getOutputStream(), true);
+            objectIn = new ObjectInputStream(socket.getInputStream());
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+
+            availableLanguages = (List<Language>) objectIn.readObject();
+            availableLanguages.forEach(language -> System.out.println(language.getLanguageName()));
         }
 
         Scanner scanner = new Scanner(System.in);
@@ -63,7 +73,7 @@ public class Client {
         if (in != null) {
             String translatedText = in.readLine();
             String statistics = in.readLine();
-            return "Translated text: " + translatedText + "\n" + statistics;
+            return translatedText;
         }
         return null;
     }

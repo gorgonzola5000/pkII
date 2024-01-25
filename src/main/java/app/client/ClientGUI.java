@@ -20,7 +20,7 @@ public class ClientGUI extends JFrame {
         int port = 8000;
         try {
             client.connect(host, port);
-        } catch (IOException e) {
+        } catch (IOException | ClassNotFoundException e) {
             System.out.println("Error connecting to server: " + e.getMessage());
         }
     }

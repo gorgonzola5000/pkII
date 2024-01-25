@@ -21,6 +21,10 @@ public class ClientHandler implements Runnable {
     @Override
     public void run() {
         try {
+            ObjectOutputStream objectOut = new ObjectOutputStream(clientSocket.getOutputStream());
+            List<Language> availableLanguages = translator.getAvailableLanguagesList();
+            objectOut.writeObject(availableLanguages);
+            objectOut.flush();
             handleClientRequest();
         } catch (IOException e) {
             System.out.println("Error handling client request: " + e.getMessage());
@@ -41,7 +45,7 @@ public class ClientHandler implements Runnable {
                 Language sourceLanguage = new Language(sourceLanguageCode);
                 Language targetLanguage = new Language(targetLanguageCode);
                 String translatedText = translator.translate(text, sourceLanguage, targetLanguage);
-                out.println(translatedText);
+                out.println("From " + sourceLanguageCode + " -> " + targetLanguageCode + ": " + text + " -> " + translatedText);
 
                 calculateStatistics(text);
                 double averageWordLength = wordLengths.stream().mapToInt(Integer::intValue).average().orElse(0.0);
